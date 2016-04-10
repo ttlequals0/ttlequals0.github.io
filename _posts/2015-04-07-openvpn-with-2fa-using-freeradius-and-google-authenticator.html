@@ -1,0 +1,104 @@
+---
+layout: post
+title: OpenVPN with 2FA using FreeRADIUS and Google Authenticator
+date: 2015-04-07 16:54:49.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+author: Dominick Krachtus
+---
+<p>This implementation of OpenVPN is using pfSense with FreeRADIUS and Google Authenticator PAM (pluggable authentication module) to generate One-time passcodes. The end result is the user is prompted for credentials, they use their username and password + One-time passcode to authenticate.</p>
+<p>For the server that will run FreeRADIUS I choose to to use Ubuntu server 14.04 LTS in a VM.</p>
+<p>The first thing is to install NTP there are two main reasons for this. The first is since Google Authenticator uses TOTP algorithm (time-based one-time password) having an out of sync system clock will lead to the passcodes that are generated being invalid. The second reason is since I decided to run the server in a VM there is a higher risk of time drift which would also result in invalid passcodes.</p>
+<pre> sudo apt-get update
+sudo apt-get install ntp
+</pre>
+<p>Up next install the FreeRADIUS package and all of the necessary dependencies.</p>
+<pre> sudo apt-get install build-essential libpam0g-dev freeradius libqrencode3 git</pre>
+<p>Download the Google Authenticator source from Github. Since it has been moved there from Google Code.</p>
+<pre> git clone https://github.com/google/google-authenticator/
+cd ~
+cd google-authenticator/libpam/
+make
+make install
+</pre>
+<p>Since we will be using local accounts on the server its a good idea to make a group to put users in if they no longer need access instead of removing them.</p>
+<pre>addgroup disabled-radius</pre>
+<h2>FreeRADIUS Configuration.</h2>
+<p>FreeRadius configuration. With this configuration there is one aspect im not thrilled about but unfortunately as of now it has to be done. The problem is since FreeRadius needs to be able to read each users .google_authenticator token in their home directory FreeRadius needs to run as root. Since this isn't the best security practice I suggest to limit access to this machine and only use it for FreeRADIUS.</p>
+<p>The first file that needs to be modified is  /etc/freeradius/radiusd.conf we need to configure FreeRadius to use the root user and group.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-14.33.51.png"><img class="alignnone size-full wp-image-29" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-14.33.51.png" alt="freeradius.conf" width="930" height="585" /></a></p>
+<p>change from this:</p>
+<pre>user = freerad
+group = freerad
+</pre>
+<p>To this:</p>
+<pre>user = root
+group = root
+</pre>
+<p>The next file that needs to be edited is /etc/freeradius/users. We need to add the disabled-radius group to the "Deny access for a group of users." section.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-14.46.04.png"><img class="alignnone size-full wp-image-30" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-14.46.04.png" alt="user.conf" width="770" height="302" /></a></p>
+<p>Add this to the end of the commented out section.</p>
+<pre> DEFAULT Group == "disabled-radius", Auth-Type := Reject
+Reply-Message = "Your account has been disabled."
+</pre>
+<p>We also going to add the rule to use PAM libraries for authentication.</p>
+<pre>DEFAULT Auth-Type := PAM</pre>
+<p>Next up to edit is /etc/freeradius/sites-enabled/default. This will enable the use of PAM for the FreeRADIUS server. To do this uncomment "pam" after the line "#  Pluggable Authentication Modules."</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-15.00.23.png"><img class="alignnone size-full wp-image-32" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-15.00.23.png" alt="PAM" width="880" height="1063" /></a></p>
+<p>Now we need to edit/etc/pam.d/radiusd to tell FreeRADIUS to use <span style="line-height: 1.6471;"> local unix password plus the Google Authenticator passcode.</span></p>
+<p><span style="line-height: 1.6471;"><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-15.06.39.png"><img class="alignnone size-full wp-image-34" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-15.06.39.png" alt="use pam" width="796" height="334" /></a>Comment out all of the lines that begin with "@" and add the following to the end.</span></p>
+<pre> auth requisite pam_google_authenticator.so forward_pass
+auth required pam_unix.so use_first_pass
+</pre>
+<p>To change the shared secret or to specify which clients will be connecting to the server this file needs to be edited. /etc/freeradius/clients.conf There many ways to specify the hosts that communicate with this server for authentication.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.33.27.png"><img class="alignnone size-full wp-image-45" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.33.27.png" alt="Screenshot 2015-04-07 16.33.27" width="704" height="730" /></a></p>
+<h2>User Configuration.</h2>
+<p>Once FreeRADIUS is configured we are going to create a test user to see if it all works. The password can be simple since this is for testing and this user can be disabled or removed from system later. I used "test123" as password.</p>
+<pre>adduser test-user</pre>
+<p>After the user is created go ahead and login as that user.</p>
+<pre>su test
+google-authenticator</pre>
+<p>If all goes this will be the output. Now that we have the QR code import it into the Google Authenticator app (or whatever is being used for OTP tokens).</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-15.34.27.png"><img class="alignnone size-full wp-image-36" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-15.34.27.png" alt="qr" width="905" height="1021" /></a></p>
+<h2>Test Configuration.</h2>
+<p>Time to test the configuration. First restart the FreeRADIUS service so the new configuration gets loaded.</p>
+<pre>sudo service freeradius restart</pre>
+<p>Use the following command to see if user can authenticate with the localhost.</p>
+<pre>radtest username unix_password+google_auth localhost 18120 testing123</pre>
+<p>example:</p>
+<pre>radtest test-user test123708169 localhost 18120 testing123</pre>
+<p>If everything is configured properly and the authentication the output should look like this.<br />
+<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-15.52.16.png"><img class="alignnone size-full wp-image-38" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-15.52.16.png" alt="local test" width="994" height="210" /></a></p>
+<h2>OpenVPN Configuration.</h2>
+<p>Now its time to tell OpenVPN to use RADIUS for authentication. Log into pfSense web interface and navigate to System &gt; User Manager and click on the servers tab and then the "+" to add a new one.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.40.50.png"><img class="alignnone size-full wp-image-47" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.40.50.png" alt="Screenshot 2015-04-07 16.40.50" width="801" height="622" /></a></p>
+<p>After the RADIUS server navigate to VPN&gt; OpenVPN then edit server and select the newly added server in the "Backend for Authentication" box.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.42.27.png"><img class="alignnone size-full wp-image-48" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.42.27.png" alt="Screenshot 2015-04-07 16.42.27" width="879" height="460" /></a></p>
+<p>Test to see if router can communicate with RADIUS server by going to Diagnostics &gt; Authentication. Select the RADIUS server from dropdown and enter username and unix password + one-time passcode.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.50.30.png"><img class="alignnone size-full wp-image-49" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.50.30.png" alt="Screenshot 2015-04-07 16.50.30" width="895" height="547" /></a></p>
+<h2>Troubleshooting.</h2>
+<p>If for some reason the FreeRADIUS fails to start or cant communicate with host try this to see if there are any errors when starting service.</p>
+<pre>sudo service freeradius stop
+sudo freeradius -X</pre>
+<p>If the service starts correctly the expected output is this:</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.04.13.png"><img class="alignnone size-full wp-image-40" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.04.13.png" alt="trouble" width="1061" height="1056" /></a></p>
+<p>Another good tool for testing radius server is NTRadPing.</p>
+<p>Output for bad credentials:<br />
+<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.09.15.png"><img class="alignnone size-full wp-image-41" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.09.15.png" alt="Screenshot 2015-04-07 16.09.15" width="682" height="423" /></a></p>
+<p>Output for unable to communicate with server:<br />
+<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.10.21.png"><img class="alignnone size-full wp-image-42" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.10.21.png" alt="Screenshot 2015-04-07 16.10.21" width="683" height="425" /></a></p>
+<p>Output for successful authentication:<br />
+<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/Screenshot-2015-04-07-16.11.58.png"><img class="alignnone size-full wp-image-43" src="{{ site.baseurl }}/assets/Screenshot-2015-04-07-16.11.58.png" alt="Screenshot 2015-04-07 16.11.58" width="692" height="432" /></a></p>
+<p>If there is issues communicating with the server it may be necessary to add allow rules for the device that will be using the server. In my case my router is accessing the server.</p>
+<pre>sudo iptables -A INPUT -p udp -s 192.168.9.1 --dport 1812 -i eth0 -j ACCEPT
+sudo iptables -A INPUT -p udp -s 192.168.9.1 --dport 1813 -i eth0 -j ACCEPT
+sudo iptables -A INPUT -p udp -s 192.168.9.1 --dport 1814 -i eth0 -j ACCEPT</pre>
+<p>save firewall settings:</p>
+<pre>sudo sh -c "iptables-save &gt; /etc/iptables.rules"</pre>
+<p>Invoke these rules at boot i added this line at the eth0 interface configuration in /etc/network/interfaces.</p>
+<pre>pre-up iptables-restore &lt; /etc/iptables.rules</pre>

@@ -1,0 +1,29 @@
+---
+layout: post
+title: Adding / Removing  Users to Mailing Lists via Powershell
+date: 2015-04-14 20:12:36.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+author: Dominick Krachtus
+---
+<p>This is a quick post for adding and removing users to mailing lists via Powershell.</p>
+<p>1. Open a powershell window. Open start menu and type "powershell". Roght click on it and click "Run as Administrator"</p>
+<p>2. Set Office365 login credential, in dialogue box use full email address ex: sample.user@domain.com</p>
+<pre>$UserCredential = Get-Credential</pre>
+<p>3. Connect to Office365</p>
+<pre>$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection</pre>
+<p>4. Import powershell session</p>
+<pre>Import-PSSession $Session</pre>
+<p>5. Add or move users to group. Users must be specified using full email address. ex. sample.user@domain.com. Note: It is possible to use "for loop" if adding a bunch of users.</p>
+<p>Add User</p>
+<pre>Add-DistributionGroupMember -Identity "mailing-list" -Member "sample.user@domain.com"</pre>
+<p>Remove User</p>
+<pre>Remove-DistributionGroupMember -Identity "mailing-list" -Member "sample.user@domain.com"</pre>
+<p>6. Be sure to disconnect the remote PowerShell session when you're finished. Failing to disconnect session may result in using up all available connections and will have to wait for them to expire.</p>
+<pre>Remove-PSSession $Session</pre>
+<p>&nbsp;</p>

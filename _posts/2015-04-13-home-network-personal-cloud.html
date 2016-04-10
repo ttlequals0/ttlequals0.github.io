@@ -1,0 +1,89 @@
+---
+layout: post
+title: Home Network (Personal Cloud)
+date: 2015-04-13 16:03:05.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+author: Dominick Krachtus
+---
+<p>This post is to show off my home network. Although I call it a home network all of my infrastructure is not located in my apartment but it's all managed remotely. I have setup a site to site VPN between my apartment and the location where all my servers are located. All servers are virtualized using fully licensed vSphere 5.5.</p>
+<p>The main use for all of my infrastructure is what I call a whole home / cloud DVR. All my tv shows are recorded, processed removing all commercials, converted for optimal streaming and posted to my media server. All of this is done automatically and has been working for years. I have tweaked the process a few times for more efficiency.</p>
+<p>The other purpose is used for a lab environment. This allows me to practice system administration and test new technologies.</p>
+<p>Home infrastructure broken down:</p>
+<ul>
+<li>Mac Mini
+<ul>
+<li>Runs vSphere 5.5</li>
+<li>Main purpose is Veeam Backup Server.</li>
+<li>16 GB  RAM</li>
+<li>2x 250 GB Samsung EVO 840 SSDs</li>
+<li>2x 1GB NICs</li>
+</ul>
+</li>
+<li>Qnapp TS-669L
+<ul>
+<li>Used mainly for backups.</li>
+<li>6x 3TB WD Reds. (RAID 5)</li>
+</ul>
+</li>
+<li>FringeBox 1100
+<ul>
+<li>pfSense Firewall / Router</li>
+<li>Used for remote VPN and site to site VPN.</li>
+</ul>
+</li>
+<li>Cisco SG200-26 Gigabit Ethernet Switch</li>
+<li>ASUS RS720-E7/RS12-E 2U
+<ul>
+<li>Runs vSphere 5.5</li>
+<li><span style="line-height: 1.6471;">2x Intel Xeon E5-2640 v2</span></li>
+<li>64 GB RAM (4x 16 GB) Kingston Technology</li>
+<li><span style="line-height: 1.6471;">2x 120 GB Samsung EVO 840 SSDs (RAID 1)</span></li>
+<li>11x 2TB HGST 7200 SAS Drives (RAID 6)</li>
+<li>Current VMs
+<ul>
+<li>Graphite in Docker (CentOS 6.5)</li>
+<li>Plex Main Server (win 7)</li>
+<li>Plex Test server (Win 7)</li>
+<li>Recording server (Win 7)</li>
+<li>FreeRADIUS server (Ubuntu 14.04)</li>
+<li>FTP (Server 2012 R2)</li>
+<li>File Server (Server 2012)</li>
+<li>DNS (CentOS 6.5)</li>
+<li>Internal stikked sever (CentOS 6.5)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Test Server (old media server)
+<ul>
+<li>Runs vSphere 5.5</li>
+<li>Core i7 3770K</li>
+<li>16 GB RAM</li>
+<li>4x 2TB WD Greens</li>
+<li>4x 1GB NICs</li>
+<li>currently running VMs
+<ul>
+<li>Nested CloudStack Environment.</li>
+<li>Nested VSAN</li>
+<li>A couple of Windows and Linux systems</li>
+<li>CHEF server 12</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>APC Smart-UPS RM SMT1500RM2U</li>
+</ul>
+<p>Recently all equipment was moved from homemade rack to a proper rack.</p>
+<p>Before:</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/2014-03-23-10.41.05.jpg"><img class="alignnone size-full wp-image-66" src="{{ site.baseurl }}/assets/2014-03-23-10.41.05.jpg" alt="2014-03-23 10.41.05" width="348" height="784" /></a></p>
+<p>&nbsp;</p>
+<p>After:</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/2015-03-28-20.10.10.jpg"><img class="alignnone size-full wp-image-61" src="{{ site.baseurl }}/assets/2015-03-28-20.10.10.jpg" alt="2015-03-28 20.10.10" width="2952" height="5248" /></a></p>
+<p><a style="line-height: 1.6471;" href="http://blog.ttlequals0.com/wp-content/uploads/2015/04/2015-03-28-20.10.05.jpg"><img class="alignnone size-full wp-image-60" src="{{ site.baseurl }}/assets/2015-03-28-20.10.05.jpg" alt="2015-03-28 20.10.05" width="2952" height="5248" /></a></p>
+<p>Note: Wasn't completely finished re-racking equipment when pictures were taken.</p>

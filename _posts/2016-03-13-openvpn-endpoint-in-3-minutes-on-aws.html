@@ -1,0 +1,55 @@
+---
+layout: post
+title: OpenVPN Endpoint In ~3 Minutes on AWS
+date: 2016-03-13 16:06:14.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+  _wp_old_slug: openvpn-in-3-minutes-on-aws
+author: Dominick Krachtus
+---
+<p>This is an improvement on a <a href="http://blog.ttlequals0.com/openvpn-endpoint-on-aws-in-10-minutes/" target="_blank">previous post</a> but this time it takes less time and is completely scripted. This process now only involves cloning a <a href="https://github.com/ttlequals0/autovpn" target="_blank">git repo</a> and running a single script. The total time it takes to deploy an OpenVPN endpoint is roughly 3 minutes, although i have seen it take less.</p>
+<p>The process is very simple but also assumes that you already have API keys in place and the boto python library installed. Also as a note this is my first attempt interacting with the AWS python API so the script might not be perfect and probably can be improved upon.</p>
+<p>The script works by executing a bash script supplying AWS keypair name as argument that then runs a python script that creates the ec2 instance and needed security groups returning the IP address. The bash script then uses the returned IP address and uses it to establish an SSH connection to the instance and configures OpenVPN. When all is finished an OpenVPN config file will be located in current working directory.</p>
+<p>Note: The openvpn-autoinstall.sh script in the autovpnn directory is what gets executed on the newly created ec2 instance to configure OpenVPN. Also this script is till a work in progress many changes will be made over time.</p>
+<p><script id="asciicast-39964" src="https://asciinema.org/a/39964.js" async="" type="text/javascript"></script><br />
+USAGE:</p>
+<p>This script assumes that all AWS credentials and tools are already setup on system.</p>
+<ol>
+<li>Clone rep to system.</li>
+<li>Execute autovpn with -k options to deploy to your default AWS region. ./autovpn -k macbook</li>
+<li>OpenVPN config files are downloaded to current working directory.</li>
+<li>Import the OpenVPN config file into VPN client.</li>
+<li>Connect to VPN.</li>
+</ol>
+<pre>DESCRIPTION:
+
+autovpn - AWS OpenVPN Deployment Tool.
+Project found at <a href="https://github.com/ttlequals0/autovpn">https://github.com/ttlequals0/autovpn</a>
+
+USAGE:
+ACTION [OPTIONS]
+-h Displays this message.
+-i AWS Instance type (Optional, Default is t2.micro)
+t2.nano t2.micro t2.small t2.medium t2.large *
+-k Specify the name of AWS keypair (Required) **
+-r Specify AWS Region (Optional, will use default region)
+us-east-1 us-west-1 us-west-2 eu-west-1 eu-west-1
+ap-southeast-1 ap-northeast-1 ap-northeast-2 ap-southeast-2
+sa-east-1 cn-north-1 ***
+
+NOTES:
+
+* - In reality any instance size can be given but the t2.micro is more than
+enough.
+** - If you choose to deploy an endpoint in a different region make sure
+you have a keypair setup in that region.
+*** - Since all ami's aren't located in all regions the ami being used will
+need to be changed to one that exists in that region. An option to do this
+will be added soon for now this will need to be manually changed in python
+script.
+</pre>

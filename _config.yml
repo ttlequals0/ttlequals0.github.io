@@ -1,0 +1,25 @@
+
+# Site settings
+title: TTLequals0
+title_image: https://en.gravatar.com/userimage/81172957/792a60d5bff56cc493d8df740ef350dd.jpg?size=200
+email: dkrachtus@ttlequals0.com
+description: TTLequals0  
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://TTLequals0.com" # the base hostname & protocol for your site
+disqus_account: ttlequals0
+post_limit: 5
+
+# Social usernames/URLs
+twitter_username: TTLequals0
+github_username:  TTLequals0
+linkedin_link: https://www.linkedin.com/in/ttlequals0
+
+# Build settings
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+permalink: pretty
+exclude: [vendor]

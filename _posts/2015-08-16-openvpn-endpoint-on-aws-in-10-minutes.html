@@ -1,0 +1,87 @@
+---
+layout: post
+title: OpenVPN Endpoint on AWS in 10 Minutes
+date: 2015-08-16 17:04:12.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+  _oembed_d3918af795c3484583b9e5dac3a9be0f: '{{unknown}}'
+  _wp_old_slug: open-vpn-endpoint-on-aws-in-10-minutes
+author: Dominick Krachtus
+---
+<p>Note: This setup can be used on Red Hat or Debian based system on pretty much and VPS for example <a href="https://www.digitalocean.com/?refcode=dbee1c57c396" target="_blank">DigitalOcean</a>. Skip to <a href="#ovpnconfig">OpenVPN Server Setup</a> to configure server on a non AWS instance. The script that is being used can be found on <a href="https://github.com/ttlequals0/openvpn-install">GitHub</a> if you want to review it or fork it.</p>
+<h2><strong>Overview</strong></h2>
+<p>The purpose of this post is to show how to setup an OpenVPN endpoint on AWS for free in roughly 10 minutes. There are plenty of free VPN solutions that could be found on the internet but most have limitations. A few of the main issues with using a random VPN solution on the internet is they usually have low bandwidth limits unless you opt for paid version. Some of the solutions inject add into webpages you visit. The two major issues with using a random VPN solutions are security related. Issue one is that the endpoint can not be trusted the provider might be capturing all user traffic for a number of reasons.  The second commonly seen issue is that the client that is provided gives the user access to the VPN but also uses there system as and endpoint or it install other software.</p>
+<p>This solution uses a free  AWS EC2 t2.micro instance all that is required is creating an AWS account. For the OpenVPN installation it is completely scripted only requiring a few questions to be answered. I have been using an AWS issue for some time now with no apparent issues.  I am not going to show how to navigate through the AWS management console since it pretty self explanatory. Also before the creation of the EC2 instances make sure your public key is in AWS management console.</p>
+<p>The limitations of using the AWS free tier.</p>
+<ul>
+<li>750 hours of <a href="https://aws.amazon.com/ec2/">Amazon EC2</a> Linux t2.micro instance usage (1 GiB of memory and 32-bit and 64-bit platform support) – enough hours to run continuously each month</li>
+<li>30 GB of <a href="https://aws.amazon.com/ebs/">Amazon Elastic Block Storage</a> in any combination of General Purpose (SSD) or Magnetic, plus 2 million I/Os (with EBS Magnetic) and 1 GB of snapshot storage</li>
+<li>15 GB of bandwidth out aggregated across all AWS services</li>
+</ul>
+<h2><strong>AWS Setup</strong></h2>
+<p>On the AWS management console in the EC2 we are going to want to launch a new instance. The OS can be Red Hat or Debian based, for this I chose to use an Ubuntu Server 14.04 LTS image. Since this is only a VPN endpoint CPU performance and Disk space isn't that big of a deal making the t2.micro instance the best choice plus its also in the free tier.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.24.30.png"><img class="alignnone size-full wp-image-122" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.24.30.png" alt="Screenshot 2015-08-16 14.24.30" width="1920" height="966" /></a></p>
+<p>On the "Configure Instance Details" page the only change that needs to be made is to check the box "<label for="gwt-uid-651">Protect against accidental termination".</label></p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.32.09.png"><img class="alignnone size-full wp-image-123" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.32.09.png" alt="Screenshot 2015-08-16 14.32.09" width="1920" height="962" /></a></p>
+<p>The "Add Storage" page no change need to be made unless for some reason you desire more disk space. Keep in mind the free tier can only use 30GB of storage total.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.43.43.png"><img class="alignnone size-full wp-image-125" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.43.43.png" alt="Screenshot 2015-08-16 14.43.43" width="1920" height="962" /></a></p>
+<p>On the "Tag Instance" page in the "value" section is where you would name the instance.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.47.02.png"><img class="alignnone size-full wp-image-127" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.47.02.png" alt="Screenshot 2015-08-16 14.47.02" width="1920" height="958" /></a></p>
+<p>The "Configure Security Group" page is the most important part of the setup since the instance is NATed the appropriate ports need to be opened and mapped correctly. Make sure "Create a <b>new</b> security group: is checked. the security group name and description can be set to whatever is desired. The following rules need to exits for this to work.</p>
+<ol>
+<li> SSH TCP port 22 with source from anywhere</li>
+<li>Custom UDP Rule UDP port 1194 source from Anywhere (Default OpenVPN port")</li>
+<li>DNS (UDP) UDP port 53 source from anywhere (Used as alternate OpenVPN port")</li>
+</ol>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.56.47.png"><img class="alignnone size-full wp-image-128" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.56.47.png" alt="Screenshot 2015-08-16 14.56.47" width="1920" height="964" /></a></p>
+<p>On the "Review and Launch" page double check to make sure everything looks correct. Click "Launch" and make sure to chose the correct key pair.</p>
+<p>Once the Instance is launched find the public ip of instance on the AWS management console in the EC2 section. Also the log on username can be found from this page in my case the default user is Ubuntu. SSH to the the instances ubuntu@ip.address.</p>
+<h2><strong><a name="ovpnconfig"></a> OpenVPN Server Setup</strong></h2>
+<p>Now its time for the actual OpenVPN configuration. Note from this point on these steps can be applied to any Red Hat or Debian based system on pretty much and VPS. My other got to VPS provider is <a href="https://www.digitalocean.com/?refcode=dbee1c57c396" target="_blank">DigitalOcean</a>. The script that is being used can be found on <a href="https://github.com/ttlequals0/openvpn-install">GitHub</a> if you want to review it or fork it.</p>
+<p>Once you are connected to your instance you are going to want to switch to root since all of the following steps will be adding packages and making other system changes.</p>
+<p>As root run the following one liner to start the setup process.</p>
+<pre><code>
+wget git.io/v35Kx --no-check-certificate -O openvpn-install.sh; bash openvpn-install.sh
+</code></pre>
+<ol>
+<li> Make sure the ip address is a private ip address on AWS or public ip address depending on you setup. If this looks good hit enter.</li>
+<li>What port do you want OpenVPN to listen on? 1194 is chosen by default but can be set to anything. If you chose different port make sure to make the appropriate changes to the security group on AWS.</li>
+<li>Do you want OpenVPN to be available at port 53 too? This is useful if the network your on is trying to block VPNs.</li>
+<li>Do you want to enable internal networking for the VPN? This will allow VPN clients to communicate between each other over the VPN. the Default is "No".</li>
+<li>What DNS servers do you want to use with the VPN? 1) Current system resolvers, 2) OpenDNS, 3) Level 3 4) Hurricane Electric or 5) Google.</li>
+<li>Last give a name for the client cert no spaces, or special characters.</li>
+<li>If everything looks good hit enter to continue the setup or ctrl+c and run script again to make changes.<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-15.57.15.png"><img class="alignnone size-full wp-image-137" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-15.57.15.png" alt="Screenshot 2015-08-16 15.57.15" width="2027" height="1150" /></a></li>
+<li>On an AWS instance or NATed VPS the script will prompt for the public ip address of the instance. This is usually the same ip used for SSH.<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-16.09.09.png"><img class="alignnone size-full wp-image-140" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-16.09.09.png" alt="Screenshot 2015-08-16 16.09.09" width="2027" height="1150" /></a></li>
+<li>At this point the server setup is complete all thats left is to download client config file and setup client.</li>
+</ol>
+<h2>Client Setup</h2>
+<p>Now that the Server is setup all that s left is to configure the client used to connect to the VPN. The config file can be used on Windows, Linux, OS X, iOS and Android.</p>
+<ol>
+<li>First we need to download the client configuration file easiest way is to use SCP <code>scp user@server-ip:~/client.ovpn Downloads/</code>. or WinSCP on Windows</li>
+<li>Install an OpenVPN client for your OS</li>
+</ol>
+<p><strong>Windows</strong></p>
+<ul>
+<li>The OpenVPN client for Windows can be found on <a href="https://openvpn.net/index.php/open-source/downloads.html">OpenVPN's Downloads page</a>. Choose the appropriate installer version for your version of Windows.</li>
+<li>After installing OpenVPN, copy the unified *<code>.ovpn</code> profile to:
+<pre class="code-pre "><code>C:\Program Files\OpenVPN\config
+</code></pre>
+<p>When you launch OpenVPN, it will automatically see the profile and makes it available.</li>
+<li>Another Client I like to use is <a href="https://www.sparklabs.com/viscosity/" target="_blank">Viscosity</a> which cost $10</li>
+<li>Note OpenVPN client need to be ran as Administrator</li>
+</ul>
+<p><strong>OS X</strong></p>
+<ul>
+<li>Use <a href="https://tunnelblick.net/downloads.html" target="_blank">Ttunnelblick</a> which is free or my favorite <a href="https://www.sparklabs.com/viscosity/" target="_blank">Viscosity</a> which cost $10</li>
+<li>To import move config file to ~ and within the client import the *.ovpn file.</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Testing VPN</h2>
+<p>Once server is setup and client is installed lets check the current ip address of our client by simply typing "my ip" into google.  This will return the ip address assigned by your ISP and as you appear on the Internet.</p>
+<p>Now connect the OpenVPN client and connect  to your VPN and go to google again and type "my ip" you should see a different ip address. If  you also want to to see what DNS servers are being used go to <a href="https://www.dnsleaktest.com/">DNSLeakTest</a> and run "Extended Test" will check your DNS settings and confirm you are now using the DNS resolvers pushed by your VPN.</p>
+<p>At this  point you now have a full functioning VPN in a matter of minutes.</p>

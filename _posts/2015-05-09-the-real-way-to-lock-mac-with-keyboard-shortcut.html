@@ -1,0 +1,30 @@
+---
+layout: post
+title: The Real Way to Lock Mac with Keyboard Shortcut.
+date: 2015-05-09 16:37:05.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+author: Dominick Krachtus
+---
+<p>There has been a number of times that I just simply want to lock my Mac at work or at home with a simple keyboard shortcut. To my surprise there really was no shortcut for example win <strong>key + L</strong> on windows or <strong>ctrl + alt + L</strong> on systems using Gnome.  When I did a few quick Google searches on how to do this many sites suggested using  <strong>c</strong><strong>ontrol+Shift+Eject </strong>or <strong>Control+Shift+Power </strong>after enabling "require password immediately after  sleep or screen saver begins.". There are some problems with these suggestions. the first issue is this not only locks the computer it also put it to sleep which means the computer has to wake up first before the lock screen appears. The second issue is  many keyboard i use do not have an "Eject" or "Power" key on them.</p>
+<p>Over some time I discovered a partial solution for locking the screen. The only slight issue was it needed to be done from a terminal window. This was fine for me since I spend most of my time at a terminal window anyways. This was accomplished by creating an alias with the command and perimeter to signal the computer to lock screen.</p>
+<pre>alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'</pre>
+<p>Finally  I have found a way to lock screen using a keyboard shortcut that didn't put the computer to sleep first. I accomplished this by using a built in tool on the Mac called "Automator" by creating a custom system service.</p>
+<p>First launch Automator by using Spotlight search and select Service for the type of document.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.04.28.png"><img class="alignnone size-full wp-image-86" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.04.28.png" alt="launch" width="1112" height="979" /></a></p>
+<p>Set the service receives "no input" from the dropdown box.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.07.59.png"><img class="alignnone size-full wp-image-87" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.07.59.png" alt="Screenshot 2015-05-09 16.07.59" width="1112" height="979" /></a></p>
+<p>Search for "shell" in the search box and double click "Run Shell Script" and paste the following into the box.</p>
+<pre>/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend</pre>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.10.37.png"><img class="alignnone size-full wp-image-90" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.10.37.png" alt="Screenshot 2015-05-09 16.10.37" width="1112" height="979" /></a></p>
+<p>Save the service and call it "LockMac" or whatever is desired and close Automator.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.14.13.png"><img class="alignnone size-full wp-image-91" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.14.13.png" alt="Screenshot 2015-05-09 16.14.13" width="1112" height="979" /></a></p>
+<p>Now got to System Preferences &gt; Keyboard &gt; Shortcuts and select "Services". Scroll down until the service that was just created using Automator is seen it should be toward the bottom. Make sure the the box to the left is checked to enable it.  Then click on the word "none" to assign the desired shortcut keys.</p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.22.13.png"><img class="alignnone size-full wp-image-94" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.22.13.png" alt="Screenshot 2015-05-09 16.22.13" width="780" height="693" /></a></p>
+<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.26.52.png"><img class="alignnone size-full wp-image-95" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.26.52.png" alt="Screenshot 2015-05-09 16.26.52" width="780" height="693" /></a></p>
+<p>At this point try out the keyboard shortcut, if everything works properly the lock screen will appear.</p>
