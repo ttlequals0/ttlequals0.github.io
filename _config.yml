@@ -6,6 +6,7 @@ email: dkrachtus@ttlequals0.com
 description: TTLequals0  
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://TTLequals0.com" # the base hostname & protocol for your site
+addthis_id: ra-570ae5c51aa52c0e
 disqus_account: ttlequals0
 post_limit: 5
 
