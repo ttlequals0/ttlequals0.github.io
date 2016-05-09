@@ -25,20 +25,20 @@ author: Dominick Krachtus
 </ul>
 <h2><strong>AWS Setup</strong></h2>
 <p>On the AWS management console in the EC2 we are going to want to launch a new instance. The OS can be Red Hat or Debian based, for this I chose to use an Ubuntu Server 14.04 LTS image. Since this is only a VPN endpoint CPU performance and Disk space isn't that big of a deal making the t2.micro instance the best choice plus its also in the free tier.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.24.30.png"><img class="alignnone size-full wp-image-122" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.24.30.png" alt="Screenshot 2015-08-16 14.24.30" width="1920" height="966" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.24.30.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.24.30.png" alt="Screenshot 2015-08-16 14.24.30" width="1596" height="966" /></a></p>
 <p>On the "Configure Instance Details" page the only change that needs to be made is to check the box "<label for="gwt-uid-651">Protect against accidental termination".</label></p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.32.09.png"><img class="alignnone size-full wp-image-123" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.32.09.png" alt="Screenshot 2015-08-16 14.32.09" width="1920" height="962" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.32.09.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.32.09.png" alt="Screenshot 2015-08-16 14.32.09" width="1596" height="962" /></a></p>
 <p>The "Add Storage" page no change need to be made unless for some reason you desire more disk space. Keep in mind the free tier can only use 30GB of storage total.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.43.43.png"><img class="alignnone size-full wp-image-125" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.43.43.png" alt="Screenshot 2015-08-16 14.43.43" width="1920" height="962" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.43.43.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.43.43.png" alt="Screenshot 2015-08-16 14.43.43" width="1596" height="962" /></a></p>
 <p>On the "Tag Instance" page in the "value" section is where you would name the instance.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.47.02.png"><img class="alignnone size-full wp-image-127" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.47.02.png" alt="Screenshot 2015-08-16 14.47.02" width="1920" height="958" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.47.02.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.47.02.png" alt="Screenshot 2015-08-16 14.47.02" width="1596" height="803" /></a></p>
 <p>The "Configure Security Group" page is the most important part of the setup since the instance is NATed the appropriate ports need to be opened and mapped correctly. Make sure "Create a <b>new</b> security group: is checked. the security group name and description can be set to whatever is desired. The following rules need to exits for this to work.</p>
 <ol>
 <li> SSH TCP port 22 with source from anywhere</li>
 <li>Custom UDP Rule UDP port 1194 source from Anywhere (Default OpenVPN port")</li>
 <li>DNS (UDP) UDP port 53 source from anywhere (Used as alternate OpenVPN port")</li>
 </ol>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-14.56.47.png"><img class="alignnone size-full wp-image-128" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.56.47.png" alt="Screenshot 2015-08-16 14.56.47" width="1920" height="964" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.56.47.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.56.47.png" alt="Screenshot 2015-08-16 14.56.47" width="1596" height="964" /></a></p>
 <p>On the "Review and Launch" page double check to make sure everything looks correct. Click "Launch" and make sure to chose the correct key pair.</p>
 <p>Once the Instance is launched find the public ip of instance on the AWS management console in the EC2 section. Also the log on username can be found from this page in my case the default user is Ubuntu. SSH to the the instances ubuntu@ip.address.</p>
 <h2><strong><a name="ovpnconfig"></a> OpenVPN Server Setup</strong></h2>
@@ -55,8 +55,8 @@ wget git.io/v35Kx --no-check-certificate -O openvpn-install.sh; bash openvpn-ins
 <li>Do you want to enable internal networking for the VPN? This will allow VPN clients to communicate between each other over the VPN. the Default is "No".</li>
 <li>What DNS servers do you want to use with the VPN? 1) Current system resolvers, 2) OpenDNS, 3) Level 3 4) Hurricane Electric or 5) Google.</li>
 <li>Last give a name for the client cert no spaces, or special characters.</li>
-<li>If everything looks good hit enter to continue the setup or ctrl+c and run script again to make changes.<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-15.57.15.png"><img class="alignnone size-full wp-image-137" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-15.57.15.png" alt="Screenshot 2015-08-16 15.57.15" width="2027" height="1150" /></a></li>
-<li>On an AWS instance or NATed VPS the script will prompt for the public ip address of the instance. This is usually the same ip used for SSH.<a href="http://blog.ttlequals0.com/wp-content/uploads/2015/08/Screenshot-2015-08-16-16.09.09.png"><img class="alignnone size-full wp-image-140" src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-16.09.09.png" alt="Screenshot 2015-08-16 16.09.09" width="2027" height="1150" /></a></li>
+<li>If everything looks good hit enter to continue the setup or ctrl+c and run script again to make changes.<a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-15.57.15.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-15.57.15.png" alt="Screenshot 2015-08-16 15.57.15" width="2027" height="1150" /></a></li>
+<li>On an AWS instance or NATed VPS the script will prompt for the public ip address of the instance. This is usually the same ip used for SSH.<a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-16.09.09.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-16.09.09.png" alt="Screenshot 2015-08-16 16.09.09" width="2027" height="1150" /></a></li>
 <li>At this point the server setup is complete all thats left is to download client config file and setup client.</li>
 </ol>
 <h2>Client Setup</h2>

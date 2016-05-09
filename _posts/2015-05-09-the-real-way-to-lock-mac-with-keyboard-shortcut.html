@@ -16,15 +16,15 @@ author: Dominick Krachtus
 <pre>alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'</pre>
 <p>Finally  I have found a way to lock screen using a keyboard shortcut that didn't put the computer to sleep first. I accomplished this by using a built in tool on the Mac called "Automator" by creating a custom system service.</p>
 <p>First launch Automator by using Spotlight search and select Service for the type of document.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.04.28.png"><img class="alignnone size-full wp-image-86" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.04.28.png" alt="launch" width="1112" height="979" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.04.28.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.04.28.png" alt="launch" width="1112" height="979" /></a></p>
 <p>Set the service receives "no input" from the dropdown box.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.07.59.png"><img class="alignnone size-full wp-image-87" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.07.59.png" alt="Screenshot 2015-05-09 16.07.59" width="1112" height="979" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.07.59.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.07.59.png" alt="Screenshot 2015-05-09 16.07.59" width="1112" height="979" /></a></p>
 <p>Search for "shell" in the search box and double click "Run Shell Script" and paste the following into the box.</p>
 <pre>/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend</pre>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.10.37.png"><img class="alignnone size-full wp-image-90" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.10.37.png" alt="Screenshot 2015-05-09 16.10.37" width="1112" height="979" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.10.37.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.10.37.png" alt="Screenshot 2015-05-09 16.10.37" width="1112" height="979" /></a></p>
 <p>Save the service and call it "LockMac" or whatever is desired and close Automator.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.14.13.png"><img class="alignnone size-full wp-image-91" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.14.13.png" alt="Screenshot 2015-05-09 16.14.13" width="1112" height="979" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.14.13.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.14.13.png" alt="Screenshot 2015-05-09 16.14.13" width="1112" height="979" /></a></p>
 <p>Now got to System Preferences &gt; Keyboard &gt; Shortcuts and select "Services". Scroll down until the service that was just created using Automator is seen it should be toward the bottom. Make sure the the box to the left is checked to enable it.  Then click on the word "none" to assign the desired shortcut keys.</p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.22.13.png"><img class="alignnone size-full wp-image-94" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.22.13.png" alt="Screenshot 2015-05-09 16.22.13" width="780" height="693" /></a></p>
-<p><a href="http://blog.ttlequals0.com/wp-content/uploads/2015/05/Screenshot-2015-05-09-16.26.52.png"><img class="alignnone size-full wp-image-95" src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.26.52.png" alt="Screenshot 2015-05-09 16.26.52" width="780" height="693" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.22.13.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.22.13.png" alt="Screenshot 2015-05-09 16.22.13" width="780" height="693" /></a></p>
+<p><a href="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.26.52.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-05-09-16.26.52.png" alt="Screenshot 2015-05-09 16.26.52" width="780" height="693" /></a></p>
 <p>At this point try out the keyboard shortcut, if everything works properly the lock screen will appear.</p>
