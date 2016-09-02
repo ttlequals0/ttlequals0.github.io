@@ -1,0 +1,75 @@
+==================================================================
+https://keybase.io/ttlequals0
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://ttlequals0.com
+  * I am ttlequals0 (https://keybase.io/ttlequals0) on keybase.
+  * I have a public key with fingerprint 85B0 C5C4 591E B464 05A6  BD6C 746C 85FA 1125 44E9
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01018354e2276b3cdbd0acf4e9137932d2d5be5c18078da3d7031c8b26add37756990a",
+            "fingerprint": "85b0c5c4591eb46405a6bd6c746c85fa112544e9",
+            "host": "keybase.io",
+            "key_id": "746c85fa112544e9",
+            "kid": "01018354e2276b3cdbd0acf4e9137932d2d5be5c18078da3d7031c8b26add37756990a",
+            "uid": "fa5224e3b20a7347f1b39765293b2319",
+            "username": "ttlequals0"
+        },
+        "service": {
+            "hostname": "ttlequals0.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1472852141,
+    "expire_in": 157680000,
+    "prev": "272142c51d659c2f3ce61add89f28ffaf67ffb5baf0ff588fb2fa31e70504503",
+    "seqno": 4,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Comment: GPGTools - https://gpgtools.org
+
+owGtUntQVFUYX8AN2ASBCMLA6M7EIC/v+97dApvVKcFChzVSQLb7OHe57LLPuzyj
+bAYGlIkisWHDEpzCGIaMlNGRxFwRRQonYiCNx1iYoNSAEpNS2L1M/VV/dv45c77z
+e33ffO8G+ak0PpKl+kHoM1tnfQZnWdWrA/NzFRBr48sgXQVkBqsXsPDAJRnNIg/p
+IBiBERojcICiFMliHM/yMMMJONAiGKXFUB7lCRYQHELDFM0zGE/BGMLRLEoyPI9R
+FEFqtTADJUGCaDUBp90pWiVZliZYmCM4nNAigMVJHCYYkuVJjsJJjiYEBkFQApdN
+ZGKBzaUw5HAs4wIpok2uyQ/jarz/wP/Pud2rcgJDoCgOMBaFGQrDKQFhMS1FEqhW
+LmGI4ut2AaeVKQIyWpIswOFmLC4YqkyC5HqxyAFltEov/8KkcLYimW932iQbZ7PI
+fwWSZNcpVKnMrmBLAGv8W8XIilZeHqVMKAZOl2izQjpERnKSqMgiOIXSBIrgSBIE
+Su2iExhFBUFQJA3LR7EBxbIkSqFILo5yBMKThJZDBYwDJCL3TmsFlBYERiApQWAJ
+lhFgQSBoWmBRgcEQQMEEjBMwBimNOaw2SIfLORmTrOkSTVZGcjsBVKnZ7xu9RuWj
+UT2i9lWWTKUJDPln80Ya1v0ZeSihrNXr6VweWTM9f7r+yfFPTN/539zZrx82BHvF
+hthnHwu4WRn1udcz9kr00MmNpWH3B0IGDYap7OXX1Ye3xFetn7rRdKGtMP1WRv3R
+Kxnh4eYjj2698VHvZPydoShD/WXSY8l77o8OKSDs3MDYQszesK6V/S9Jvs/P3p3q
+/L7x3vzmE6dnHi/N6Zm7fUJ1vO/FuB0pqe3L7Wb9prSa5uPfaPxzGn8bCp/uXqzY
+nBbR6JNT+GHf9ZgOe3P+Sv7El90pa/ujJx6+ZQn1MtdaO+8Uvpdw8M2nEn5uWepb
+bzivPRJQCyWP7+4iE25nHOjK/KKpuWftvsNw5KXedEfLIDZRfipM09LNBEboNyVV
+5WNDsDhqtk1Wf+Z7ceEonbY7IiT48qzVnjXq8RpHB5L3vJC9spCY+0RlQ2R2XX/t
+sYmhb7e989ouz7WRxofLOzr0d6+qm7ddmnnj6UWQHTJsCjasay9Ir8utCSyH9GD8
+l8GMXcnH3J/Wvt833ZQSTLS5S/S6M9M9i3nDRX68CWTkx58lzLdqPt7TOMzXvZz5
+tueHM22xG5bSF+6F/ZgWM+73E9VxaOf24X39iVerNqQmXr8olBeY3EEacL619orJ
+FZCoLpmLShw9tfFgb1ts5vbQrA9m+n9X585Wz48V/VoX98CxjO91+J905C0d+Prc
+VxcmK4LUqVk9cffP/gU=
+=3pAs
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/ttlequals0
+
+==================================================================
+
+
