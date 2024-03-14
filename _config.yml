@@ -1,7 +1,7 @@
 
 # Site settings
 title: TTLequals0
-title_image: https://gravatar.com/userimage/81172957/188557d4a24575dd3c9b20c22cd116a0.jpeg?size=256
+title_image: ./assets/IMG_7718.PNG
 email: dkrachtus@ttlequals0.com
 title_description: ""
 baseurl: "" # the subpath of your site, e.g. /blog
