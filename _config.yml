@@ -1,11 +1,11 @@
 
 # Site settings
 title: TTLequals0
-title_image: https://en.gravatar.com/userimage/81172957/792a60d5bff56cc493d8df740ef350dd.jpg?size=200
+title_image: https://gravatar.com/userimage/81172957/188557d4a24575dd3c9b20c22cd116a0.jpeg?size=256
 email: dkrachtus@ttlequals0.com
-title_description: "PGP Fingerprint: 85B0 C5C4 591E B464 05A6 BD6C 746C 85FA 1125 44E9"
+title_description: ""
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://TTLequals0.com" # the base hostname & protocol for your site
+url: "https://TTLequals0.com" # the base hostname & protocol for your site
 addthis_id: ra-570ae5c51aa52c0e
 disqus_account: ttlequals0
 post_limit: 5
