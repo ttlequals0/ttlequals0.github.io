@@ -15,8 +15,8 @@ author: Dominick Krachtus
 ---
 <p>Note: This setup can be used on Red Hat or Debian based system on pretty much and VPS for example <a href="https://www.digitalocean.com/?refcode=dbee1c57c396" target="_blank">DigitalOcean</a>. Skip to <a href="#ovpnconfig">OpenVPN Server Setup</a> to configure server on a non AWS instance. The script that is being used can be found on <a href="https://github.com/ttlequals0/openvpn-install">GitHub</a> if you want to review it or fork it.</p>
 <h2><strong>Overview</strong></h2>
-<p>The purpose of this post is to show how to setup an OpenVPN endpoint on AWS for free in roughly 10 minutes. There are plenty of free VPN solutions that could be found on the internet but most have limitations. A few of the main issues with using a random VPN solution on the internet is they usually have low bandwidth limits unless you opt for paid version. Some of the solutions inject add into webpages you visit. The two major issues with using a random VPN solutions are security related. Issue one is that the endpoint can not be trusted the provider might be capturing all user traffic for a number of reasons.  The second commonly seen issue is that the client that is provided gives the user access to the VPN but also uses there system as and endpoint or it install other software.</p>
-<p>This solution uses a free  AWS EC2 t2.micro instance all that is required is creating an AWS account. For the OpenVPN installation it is completely scripted only requiring a few questions to be answered. I have been using an AWS issue for some time now with no apparent issues.  I am not going to show how to navigate through the AWS management console since it pretty self explanatory. Also before the creation of the EC2 instances make sure your public key is in AWS management console.</p>
+<p>The purpose of this post is to show how to setup an OpenVPN endpoint on AWS for free in roughly 10 minutes. There are plenty of free VPN solutions that could be found on the internet but most have limitations. A few of the main issues with using a random VPN solution on the internet is they usually have low bandwidth limits unless you opt for paid version. Some of the solutions inject ads into webpages you visit. The two major issues with using a random VPN solutions are security related. Issue one is that the endpoint can not be trusted the provider might be capturing all user traffic for a number of reasons.  The second commonly seen issue is that the client that is provided gives the user access to the VPN but also uses their system as an endpoint or it installs other software.</p>
+<p>This solution uses a free  AWS EC2 t2.micro instance all that is required is creating an AWS account. For the OpenVPN installation it is completely scripted only requiring a few questions to be answered. I have been using an AWS instance for some time now with no apparent issues.  I am not going to show how to navigate through the AWS management console since it pretty self explanatory. Also before the creation of the EC2 instances make sure your public key is in AWS management console.</p>
 <p>The limitations of using the AWS free tier.</p>
 <ul>
 <li>750 hours of <a href="https://aws.amazon.com/ec2/">Amazon EC2</a> Linux t2.micro instance usage (1 GiB of memory and 32-bit and 64-bit platform support) – enough hours to run continuously each month</li>
@@ -32,7 +32,7 @@ author: Dominick Krachtus
 <p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.43.43.png"><img src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.43.43.png" alt="Screenshot 2015-08-16 14.43.43" width="1596" height="962" /></a></p>
 <p>On the "Tag Instance" page in the "value" section is where you would name the instance.</p>
 <p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.47.02.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.47.02.png" alt="Screenshot 2015-08-16 14.47.02" width="1596" height="803" /></a></p>
-<p>The "Configure Security Group" page is the most important part of the setup since the instance is NATed the appropriate ports need to be opened and mapped correctly. Make sure "Create a <b>new</b> security group: is checked. the security group name and description can be set to whatever is desired. The following rules need to exits for this to work.</p>
+<p>The "Configure Security Group" page is the most important part of the setup since the instance is NATed the appropriate ports need to be opened and mapped correctly. Make sure "Create a <b>new</b> security group: is checked. the security group name and description can be set to whatever is desired. The following rules need to exist for this to work.</p>
 <ol>
 <li> SSH TCP port 22 with source from anywhere</li>
 <li>Custom UDP Rule UDP port 1194 source from Anywhere (Default OpenVPN port")</li>
@@ -40,9 +40,9 @@ author: Dominick Krachtus
 </ol>
 <p><a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.56.47.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-14.56.47.png" alt="Screenshot 2015-08-16 14.56.47" width="1596" height="964" /></a></p>
 <p>On the "Review and Launch" page double check to make sure everything looks correct. Click "Launch" and make sure to chose the correct key pair.</p>
-<p>Once the Instance is launched find the public ip of instance on the AWS management console in the EC2 section. Also the log on username can be found from this page in my case the default user is Ubuntu. SSH to the the instances ubuntu@ip.address.</p>
+<p>Once the Instance is launched find the public ip of instance on the AWS management console in the EC2 section. Also the log on username can be found from this page in my case the default user is Ubuntu. SSH to the instance ubuntu@ip.address.</p>
 <h2><strong><a name="ovpnconfig"></a> OpenVPN Server Setup</strong></h2>
-<p>Now its time for the actual OpenVPN configuration. Note from this point on these steps can be applied to any Red Hat or Debian based system on pretty much and VPS. My other got to VPS provider is <a href="https://www.digitalocean.com/?refcode=dbee1c57c396" target="_blank">DigitalOcean</a>. The script that is being used can be found on <a href="https://github.com/ttlequals0/openvpn-install">GitHub</a> if you want to review it or fork it.</p>
+<p>Now it's time for the actual OpenVPN configuration. Note from this point on these steps can be applied to any Red Hat or Debian based system on pretty much any VPS. My other go-to VPS provider is <a href="https://www.digitalocean.com/?refcode=dbee1c57c396" target="_blank">DigitalOcean</a>. The script that is being used can be found on <a href="https://github.com/ttlequals0/openvpn-install">GitHub</a> if you want to review it or fork it.</p>
 <p>Once you are connected to your instance you are going to want to switch to root since all of the following steps will be adding packages and making other system changes.</p>
 <p>As root run the following one liner to start the setup process.</p>
 <pre><code>
@@ -57,10 +57,10 @@ wget git.io/v35Kx --no-check-certificate -O openvpn-install.sh; bash openvpn-ins
 <li>Last give a name for the client cert no spaces, or special characters.</li>
 <li>If everything looks good hit enter to continue the setup or ctrl+c and run script again to make changes.<a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-15.57.15.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-15.57.15.png" alt="Screenshot 2015-08-16 15.57.15" width="2027" height="1150" /></a></li>
 <li>On an AWS instance or NATed VPS the script will prompt for the public ip address of the instance. This is usually the same ip used for SSH.<a href="{{ site.baseurl }}/assets/Screenshot-2015-08-16-16.09.09.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-08-16-16.09.09.png" alt="Screenshot 2015-08-16 16.09.09" width="2027" height="1150" /></a></li>
-<li>At this point the server setup is complete all thats left is to download client config file and setup client.</li>
+<li>At this point the server setup is complete all that's left is to download client config file and setup client.</li>
 </ol>
 <h2>Client Setup</h2>
-<p>Now that the Server is setup all that s left is to configure the client used to connect to the VPN. The config file can be used on Windows, Linux, OS X, iOS and Android.</p>
+<p>Now that the Server is setup all that's left is to configure the client used to connect to the VPN. The config file can be used on Windows, Linux, OS X, iOS and Android.</p>
 <ol>
 <li>First we need to download the client configuration file easiest way is to use SCP <code>scp user@server-ip:~/client.ovpn Downloads/</code>. or WinSCP on Windows</li>
 <li>Install an OpenVPN client for your OS</li>
@@ -71,17 +71,17 @@ wget git.io/v35Kx --no-check-certificate -O openvpn-install.sh; bash openvpn-ins
 <li>After installing OpenVPN, copy the unified *<code>.ovpn</code> profile to:
 <pre class="code-pre "><code>C:\Program Files\OpenVPN\config
 </code></pre>
-<p>When you launch OpenVPN, it will automatically see the profile and makes it available.</li>
+<p>When you launch OpenVPN, it will automatically see the profile and makes it available.</p></li>
 <li>Another Client I like to use is <a href="https://www.sparklabs.com/viscosity/" target="_blank">Viscosity</a> which cost $10</li>
-<li>Note OpenVPN client need to be ran as Administrator</li>
+<li>Note OpenVPN client needs to be run as Administrator</li>
 </ul>
 <p><strong>OS X</strong></p>
 <ul>
-<li>Use <a href="https://tunnelblick.net/downloads.html" target="_blank">Ttunnelblick</a> which is free or my favorite <a href="https://www.sparklabs.com/viscosity/" target="_blank">Viscosity</a> which cost $10</li>
+<li>Use <a href="https://tunnelblick.net/downloads.html" target="_blank">Tunnelblick</a> which is free or my favorite <a href="https://www.sparklabs.com/viscosity/" target="_blank">Viscosity</a> which cost $10</li>
 <li>To import move config file to ~ and within the client import the *.ovpn file.</li>
 </ul>
 <p>&nbsp;</p>
 <h2>Testing VPN</h2>
 <p>Once server is setup and client is installed lets check the current ip address of our client by simply typing "my ip" into google.  This will return the ip address assigned by your ISP and as you appear on the Internet.</p>
-<p>Now connect the OpenVPN client and connect  to your VPN and go to google again and type "my ip" you should see a different ip address. If  you also want to to see what DNS servers are being used go to <a href="https://www.dnsleaktest.com/">DNSLeakTest</a> and run "Extended Test" will check your DNS settings and confirm you are now using the DNS resolvers pushed by your VPN.</p>
+<p>Now connect the OpenVPN client and connect  to your VPN and go to google again and type "my ip" you should see a different ip address. If  you also want to see what DNS servers are being used go to <a href="https://www.dnsleaktest.com/">DNSLeakTest</a> and run "Extended Test" will check your DNS settings and confirm you are now using the DNS resolvers pushed by your VPN.</p>
 <p>At this  point you now have a full functioning VPN in a matter of minutes.</p>

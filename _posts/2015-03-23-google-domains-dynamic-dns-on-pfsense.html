@@ -11,11 +11,11 @@ meta:
   _edit_last: '1'
 author: Dominick Krachtus
 ---
-<p>This is a quick write up on how to configure Google Domains Dynamic DNS on pfSense. Since Google Domains is fairly new it is not officially supported in pfSense nor is there any good documentation on how to do accomplish this</p>
-<p>Lets start by setting up the Dynamic DNS in Google Domains. This part is pretty straight forward.</p>
+<p>This is a quick write up on how to configure Google Domains Dynamic DNS on pfSense. Since Google Domains is fairly new it is not officially supported in pfSense nor is there any good documentation on how to do accomplish this.</p>
+<p>Let's start by setting up the Dynamic DNS in Google Domains. This part is pretty straight forward.</p>
 <p>On the DNS tab in Google Domains scroll down to the "Synthetic records" portion.  Select Dynamic DNS from the dropdown, fill in the subdomain name and select add.</p>
 <p><a href="{{ site.baseurl }}/assets/Screenshot-2015-03-23-18.41.22.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-03-23-18.41.22.png" alt="synthetic Record" width="944" height="173" /></a></p>
-<p>Once the record is added expand the entry to reveal the record information. It show just an "A" record with an IP of 0.0.0.0 since nothing is configure yet. Click on the "View credentials" link to unmask the Username and Password.</p>
+<p>Once the record is added expand the entry to reveal the record information. It will show just an "A" record with an IP of 0.0.0.0 since nothing is configured yet. Click on the "View credentials" link to unmask the Username and Password.</p>
 <p><a href="{{ site.baseurl }}/assets/Screenshot-2015-03-23-18.47.34.png"><img  src="{{ site.baseurl }}/assets/Screenshot-2015-03-23-18.47.34.png" alt="DNS Record" width="912" height="239" /></a></p>
 <p>On the pfSense router navigate to Services &gt; Dynamic DNS. On the DynDNS tab click the + sign to add new entry. From the "Service type" dropdown select "custom" since Google Domains is not an option and needs to be configured manually. Set the "Interface to monitor" and "Interface to send update from" to WAN. Fill in the Username and password with the information provided from Google Domains. For the "Update URL" copy the link below and change the hostname to the subdomain that was set in Google Domains. Also update "Result Match" with the information below.</p>
 <p>Update Url:</p>
