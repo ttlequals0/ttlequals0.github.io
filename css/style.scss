@@ -276,6 +276,43 @@ ul {
 	}
 }
 
+/* Other Tools */
+
+.other-tools {
+	text-align: center;
+	padding-top: 30px;
+	padding-bottom: 20px;
+
+	h2 {
+		font-family: 'Montserrat', sans-serif;
+		color: $light-blue;
+		font-size: 22px;
+		margin-bottom: 20px;
+		letter-spacing: 1px;
+	}
+
+	ul {
+		display: inline-block;
+		text-align: left;
+		padding: 0;
+
+		li {
+			margin-bottom: 10px;
+			font-size: 16px;
+			color: $light-medium;
+
+			a {
+				color: $white;
+				font-weight: 400;
+			}
+
+			a:hover {
+				color: $light-blue;
+			}
+		}
+	}
+}
+
 /* Index */
 
 .index {
