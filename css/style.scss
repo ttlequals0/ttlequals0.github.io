@@ -282,24 +282,37 @@ ul {
 	text-align: center;
 	padding-top: 30px;
 	padding-bottom: 20px;
+	max-width: 500px;
+	margin: 0 auto;
 
 	h2 {
 		font-family: 'Montserrat', sans-serif;
 		color: $light-blue;
-		font-size: 22px;
-		margin-bottom: 20px;
-		letter-spacing: 1px;
+		font-size: 16px;
+		margin-bottom: 16px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+
+		@media (min-width: $screen-sm-min) {
+			font-size: 18px;
+		}
 	}
 
 	ul {
-		display: inline-block;
-		text-align: left;
-		padding: 0;
+		text-align: center;
+		padding: 0 15px;
+		margin: 0;
 
 		li {
-			margin-bottom: 10px;
-			font-size: 16px;
+			margin-bottom: 8px;
+			font-size: 13px;
 			color: $light-medium;
+			line-height: 1.5;
+
+			@media (min-width: $screen-sm-min) {
+				font-size: 15px;
+				margin-bottom: 10px;
+			}
 
 			a {
 				color: $white;
