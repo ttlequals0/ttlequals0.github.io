@@ -213,6 +213,7 @@ ul {
 
 	.projects-row {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-evenly;
 		align-items: flex-start;
 		gap: 40px;
