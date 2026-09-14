@@ -12,6 +12,7 @@ $google-plus:    #c95644;
 $github:         #f6c2a4;
 $stack-overflow: #c98b3b;
 $rss:            #eea33a;
+$buymeacoffee:   #ffdd00;
 
 $darker:         #040405;
 $dark:           #040405;
@@ -198,6 +199,10 @@ ul {
 
 	.fa-stack-overflow:hover {
 		color: $stack-overflow;
+	}
+
+	.fa-coffee:hover {
+		color: $buymeacoffee;
 	}
 
 	.fa-rss:hover {
