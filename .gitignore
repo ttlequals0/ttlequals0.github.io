@@ -30,3 +30,8 @@ Gemfile.lock
 # Claude Code
 .claude.local.md
 CLAUDE.md
+AGENTS.md
+
+# Local tooling / scratch
+.playwright-mcp/
+_data/test
